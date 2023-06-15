@@ -1,14 +1,26 @@
-FROM node:18
+#FROM node:18
+#WORKDIR /usr/src/app
+#COPY package*.json ./
+#RUN npm install
+# Bundle app source
+#COPY . .
+#EXPOSE 8080
+#CMD [ "node", "index.js" ]
 
-WORKDIR /usr/src/app
+FROM node:10-alpine
+
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
 
 COPY package*.json ./
 
+USER node
+
 RUN npm install
 
-# Bundle app source
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 8080
 
-CMD [ "node", "index.js" ]
+CMD [ "node", "app.js" ]
